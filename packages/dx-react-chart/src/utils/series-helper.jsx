@@ -48,20 +48,27 @@ export const declareSeries = (pluginName, { components, ...parameters }) => {
           <Template name="series">
             <TemplatePlaceholder />
             <TemplateConnector>
-              {({ series, scales, getAnimatedStyle }) => {
+              {({
+                series, scales, getAnimatedStyle, defsConnectorComponent,
+              }) => {
                 const currentSeries = findSeriesByName(symbolName, series);
                 const currentScales = {
                   xScale: scales[ARGUMENT_DOMAIN],
                   yScale: scales[getValueDomainName(currentSeries.axisName)],
                 };
-                const { seriesComponent: Series, points, ...props } = getRenderProps(currentSeries);
+                const {
+                  seriesComponent: Series, points, ...props
+                } = getRenderProps(currentSeries);
                 return (
-                  <Series
-                    coordinates={points}
-                    scales={currentScales}
-                    getAnimatedStyle={getAnimatedStyle}
-                    {...props}
-                  />
+                  <React.Fragment>
+                    <Series
+                      defsConnectorComponent={defsConnectorComponent}
+                      coordinates={points}
+                      scales={currentScales}
+                      getAnimatedStyle={getAnimatedStyle}
+                      {...props}
+                    />
+                  </React.Fragment>
                 );
               }}
             </TemplateConnector>
