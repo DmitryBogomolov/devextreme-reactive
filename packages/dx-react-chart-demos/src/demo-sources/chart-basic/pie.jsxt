@@ -2,7 +2,10 @@ import * as React from 'react';<%&additionalImports%>
 import {
   Chart,
   PieSeries,
+  Tooltip,
 } from '@devexpress/dx-react-chart-<%&themeName%>';
+
+import { EventTracker, HoverState, SelectionState } from '@devexpress/dx-react-chart';
 
 const data = [
   { country: 'Russia', area: 12 },
@@ -20,6 +23,11 @@ export default class Demo extends React.PureComponent {
 
     this.state = {
       data,
+      selection: [],
+    };
+
+    this.handleClick = ({ targets }) => {
+      this.setState({ selection: targets })
     };
   }
 
@@ -35,6 +43,10 @@ export default class Demo extends React.PureComponent {
             valueField="area"
             argumentField="country"
           />
+          <EventTracker onClick={this.handleClick} />
+          <HoverState />
+          <SelectionState selection={this.state.selection} />
+          <Tooltip />
         </Chart>
       </<%&wrapperTag%>>
     );

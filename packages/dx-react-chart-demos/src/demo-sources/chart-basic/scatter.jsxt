@@ -2,9 +2,16 @@ import * as React from 'react';<%&additionalImports%>
 import {
   Chart,
   ScatterSeries,
+  Tooltip
 } from '@devexpress/dx-react-chart-<%&themeName%>';
+import { EventTracker, HoverState, SelectionState } from '@devexpress/dx-react-chart';
 
 import { dataGenerator } from '../../../demo-data/generator';
+
+const Content = ({ text, ...restProps }) => {
+  const value = Number(text);
+  return <Tooltip.Content text={value.toFixed(2)} {...restProps} />;
+};
 
 export default class Demo extends React.PureComponent {
   constructor(props) {
@@ -12,6 +19,11 @@ export default class Demo extends React.PureComponent {
 
     this.state = {
       data: dataGenerator(100),
+      selection: [],
+    };
+
+    this.handleClick = ({ targets }) => {
+      this.setState({ selection: targets });
     };
   }
 
@@ -24,13 +36,19 @@ export default class Demo extends React.PureComponent {
           data={chartData}
         >
           <ScatterSeries
+            name="s1"
             valueField="val1"
             argumentField="arg1"
           />
           <ScatterSeries
+            name="s2"
             valueField="val2"
             argumentField="arg2"
           />
+          <EventTracker onClick={this.handleClick} />
+          <HoverState />
+          <SelectionState selection={this.state.selection} />
+          <Tooltip contentComponent={Content} />
         </Chart>
       </<%&wrapperTag%>>
     );

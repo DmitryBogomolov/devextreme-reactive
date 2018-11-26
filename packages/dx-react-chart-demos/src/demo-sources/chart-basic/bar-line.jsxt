@@ -7,8 +7,10 @@ import {
   ValueAxis,
   Title,
   Legend,
+  Tooltip,
 } from '@devexpress/dx-react-chart-<%&themeName%>';
-import { ValueScale, Stack } from '@devexpress/dx-react-chart';
+
+import { ValueScale, Stack, EventTracker, HoverState, SelectionState } from '@devexpress/dx-react-chart';
 
 import { oilProduction } from '../../../demo-data/data-vizualization';
 
@@ -34,6 +36,11 @@ export default class Demo extends React.PureComponent {
 
     this.state = {
       oilProduction,
+      selection: [],
+    };
+
+    this.handleClick = ({ targets }) => {
+      this.setState({ selection: targets });
     };
   }
 
@@ -105,6 +112,10 @@ export default class Demo extends React.PureComponent {
             ]}
           />
           <Legend />
+          <EventTracker onClick={this.handleClick} />
+          <HoverState />
+          <SelectionState selection={this.state.selection} />
+          <Tooltip />
         </Chart>
       </<%&wrapperTag%>>
     );
